@@ -105,7 +105,6 @@ def merge_sort(array):
             porownan +=1
     return array, porownan
 
-
 def pomiary_merge_sort(mer_list, tryb):
     start = time.time()
     sort_list = merge_sort(mer_list)
@@ -114,6 +113,30 @@ def pomiary_merge_sort(mer_list, tryb):
     print("czas operacji: ", (end - start))
     print("liczba porównań: " + str(porownan))
     # dodać liczbę scaleń
+
+#HEAP SORT
+def heap(array, n, i):
+    smallest = i
+    l = 2 * i + 1
+    r = 2 * i + 2 
+    if l < n and array[l] < array[smallest]:
+        smallest = l
+    if r < n and array[r] < array[smallest]:
+        smallest = r
+    if smallest != i:
+        array[i], array[smallest] = array[smallest], array[i]
+        heap(array, n, smallest)
+
+def heap_sort(array, tryb):
+    n = len(array)
+    start = time.time()
+    for i in range(int(n / 2) - 1, -1, -1):
+        heap(array, n, i)
+    for i in range(n-1, -1, -1):
+        array[0], array[i] = array[i], array[0]
+        heap(array, i, 0)
+    end = time.time()
+    print('Czas operacji: ', end - start)
 
 
 # SHELL SORT KNUTH SEQUENCE
@@ -140,7 +163,7 @@ def shell_sort(array, tryb):
         print(*array)
     # dodac liczbe porownan i zamian
 
-
+#QUICK SORT RECURSION:
 def quick_sort(array, tryb):
     if len(array) <= 1: return array
     smaller, equal, larger = [], [], []
@@ -171,7 +194,7 @@ def rodzaj_sortowania(ciag, tryb, tablica):    # tryb okresla czy program ma dan
     if ciag == 1:
         return pomiary_merge_sort(tablica, tryb)
     elif ciag == 2:
-        return 1 # tu bedzie heap sort
+        return heap_sort(tablica, tryb)
     elif ciag == 3:
         return insertion_sort(tablica, tryb)
     elif ciag == 4:
@@ -184,14 +207,23 @@ def rodzaj_sortowania(ciag, tryb, tablica):    # tryb okresla czy program ma dan
 print("Czy chcesz wprowadzic dane recznie? (t/n)")
 ans = input()
 if ans == 't':
-    print('Wprowadz dane uzywajac spacji')
-    tab = list(map(int, input().split()))
+    print('Podaj dlugosc ciagu: ')
+    n = int(input())
 
+    print('Wprowadz pokolei i pojedyńczo dane do programu')
+    tab = []
+    for i in range(0, n):
+        print('liczba nr ', i+1)
+        num = int(input())
+        tab.append(num)
+    
     print('Wybierz rodzaj sortowania: 1) Merge sort 2) Heap sort 3) Insertion sort 4) Shell sort 5) Quick sort')
     rodzaj = int(input())
-    rodzaj_sortowania(rodzaj, ans, tab)
 
+    print('_______________________________________________________________________')
+    rodzaj_sortowania(rodzaj, ans, tab)
     print('Ciag wejsciowy: ', *tab)
+
 elif ans == 'n':
     print('Podaj dlugosc ciagu: ')
     n = int(input())
@@ -201,7 +233,7 @@ elif ans == 'n':
 
     print('Wybierz rodzaj sortowania: 1) Merge sort 2) Heap sort 3) Insertion sort 4) Shell sort 5) Quick sort')
     rodzaj = int(input())
-
+    print('_______________________________________________________________________')
     for i in range(10):
         print("Pomiar nr: ", i + 1)
         if ciag == 1:
